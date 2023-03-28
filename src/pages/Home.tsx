@@ -1,10 +1,17 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Task from "../components/Task";
-import { useGetAllTasksQuery } from "../services/api/tasks";
+import { deleteTask } from "../features/taskSlice";
+import { useDeleteTaskMutation, useGetAllTasksQuery } from "../services/api/tasks";
+
 
 function Home() {
   const { data: tasks = [], isLoading } = useGetAllTasksQuery();
+   const [deleteTask, { isLoading : isLodingDelete }] = useDeleteTaskMutation();
 
+  const handleDeleteTask = (Task : any) => {
+    deleteTask(Task);
+  };
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -16,7 +23,7 @@ function Home() {
           title={task.name}
           description={task.description}
           status={task.status}
-          // onDelete={() => handleDelete(task.id)}
+          onDelete={() => handleDeleteTask(task.id)}
         />
       ))}
     </div>
